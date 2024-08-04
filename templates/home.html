@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% load static %}  <!-- Add this line -->
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="text-center mb-4">
+            <img src="{% static 'images/welcome_image.png' %}" alt="Welcome Image" class="img-fluid rounded">
+        </div>
+
+        {% if user.is_authenticated %}
+            <div class="text-center mb-4">
+
+                
+                <h2>Hi {{ user.username }}!</h2>
+                <h1 class="text-center mb-4">Welcome to Your Dashboard</h1>
+                
+                <div class="card p-3 mb-3">
+                    <h4>User Information</h4>
+                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>First Name:</strong> {{ user.first_name }}</p>
+                    <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+                </div>
+                
+                <div class="card p-3 mb-3">
+                    <h4>Recent Activity</h4>
+                    <ul>
+                        {% for activity in recent_activities %}
+                            <li>{{ activity }}</li>
+                        {% empty %}
+                            <li>No recent activity.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="card p-3 mb-3">
+                    <h4>Tips and Announcements</h4>
+                    <p>Stay informed with the latest tips and announcements!</p>
+                </div>
+
+                
+                
+                <form method="post" action="{% url 'logout' %}" class="text-center">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Logout</button>
+                </form>
+            </div>
+        {% else %}
+            <div class="text-center">
+                <p>You are NOT logged in.</p>
+                <a class="btn btn-primary" href="{% url 'login' %}">Log In</a>
+                <a class="btn btn-secondary" href="{% url 'signup' %}">Sign Up</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
